@@ -15,3 +15,4 @@ dify_config = {
 scp_config = {
     "scp_offline_zim_path": os.getenv("SCP_OFFLINE_ZIM_PATH"),
 }
+print("Dify 配置:", dify_config)

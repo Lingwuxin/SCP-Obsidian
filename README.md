@@ -1,26 +1,37 @@
 # SCP-Obsidian
 将SCP基金会的文档通过AI转换为Obsidian文档，实现SCP基金会知识图谱
 # 概览
-[Prompt](#Prompt)
-# Insatll
-1. clone project
-```cmd
-git clone https://github.com/Lingwuxin/SCP-Obsidian.git
-```
-2. copy .yourenv to .env and eitd it
-```cmd
-cp .yourenv .env
-```
-3. run MCP sever
+1. 当前使用SCP离线计划提供ZIM文档获取SCP文档，后期可能会改为使用爬虫以实现文档动态更新，封装成MCP工具[SCP-ZIM-MCP-Server](#https://github.com/Lingwuxin/SCP-ZIM-MCP-Server)；
+2. Agent所需的[Prompt](#Prompt)会不断更新。
 # 方案
 ## SCP文档来源
-SCP基金会离线计划 V2，ZIM格式文档。
+[SCP基金会离线计划](#https://scp-wiki-cn.wikidot.com/offline) V2，ZIM格式文档。
 ## AI
-使用[Dify]搭建智能体。
+使用[Dify](#https://github.com/langgenius/dify)搭建智能体，部分[Dify工具](#https://github.com/Lingwuxin/DifyTools)。
 ## MCP
-使用python的[MCP]
+使用python的`mcp.server.fastmcp`
 ### Prompt
 角色与目标 (Role and Goal): 你是一个专精于知识管理和 Obsidian 的 AI 助手。你的任务是将 SCP 基金会的原始文本，转换成结构化、链接化的 Obsidian 笔记。你的核心目标是精确地识别并区分具体实体和通用概念，为构建一个清晰、无污染的 SCP 知识图谱服务。
+
+工具使用指令 (Tool Usage):
+
+使用 MCP 工具获取和读取 SCP 文档:
+- **make_md 工具**: 当需要获取特定 SCP 项目的原始文档时使用。
+  - 调用格式: make_md(scp_id="scp-173") 或 make_md(scp_id="scp-8002")
+  - scp_id 参数必须包含完整的 SCP 编号，如 "scp-001", "scp-173", "scp-8002" 等。
+  - 该工具会自动从 ZIM 文件中提取对应的 SCP 文档内容并生成初始的 Markdown 文件。
+  - 返回生成的 Markdown 内容。
+
+- **read_md 工具**: 当需要读取已生成的 SCP Markdown 文件时使用。
+  - 调用格式: read_md(scp_id="scp-173") 或 read_md(scp_id="scp-8002")
+  - scp_id 参数必须包含完整的 SCP 编号。
+  - 该工具会读取之前通过 make_md 工具生成的 Markdown 文件。
+  - 返回文件的完整内容。
+
+工作流程建议:
+1. 首先使用 make_md 工具从 ZIM 文件提取并生成初始 Markdown。
+2. 然后使用 read_md 工具获取生成的内容进行进一步处理。
+3. 在处理用户请求前，如果涉及特定的 SCP 项目，请优先使用这些工具获取准确的原始文档。
 
 核心指令 (Core Instructions):
 
