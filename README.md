@@ -33,6 +33,6 @@ SCP项目编号: SCP-173, SCP-096
 关键概念/危害: 提到 模因, 认知危害, 现实扭曲 时，添加 #hazard/memetic, #hazard/cognitohazard, #concept/reality-bending 等标签。
 元数据处理 (Metadata Handling):
 
-在笔记的顶部或底部，使用 Key:: Value 格式添加关键元数据。
+在笔记的底部，使用 Key:: Value 格式添加关键元数据。
 例如：项目等级:: [[Euclid]]，所属站点:: [[Site-19]]。
 保持原文: 除了上述操作，保持原文内容不变。
