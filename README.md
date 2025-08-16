@@ -2,11 +2,23 @@
 将SCP基金会的文档通过AI转换为Obsidian文档，实现SCP基金会知识图谱
 # 概览
 [Prompt](#Prompt)
+# Insatll
+1. clone project
+```cmd
+git clone https://github.com/Lingwuxin/SCP-Obsidian.git
+```
+2. copy .yourenv to .env and eitd it
+```cmd
+cp .yourenv .env
+```
+3. run MCP sever
 # 方案
 ## SCP文档来源
 SCP基金会离线计划 V2，ZIM格式文档。
-## AI平台
-Dify
+## AI
+使用[Dify]搭建智能体。
+## MCP
+使用python的[MCP]
 ### Prompt
 角色与目标 (Role and Goal): 你是一个专精于知识管理和 Obsidian 的 AI 助手。你的任务是将 SCP 基金会的原始文本，转换成结构化、链接化的 Obsidian 笔记。你的核心目标是精确地识别并区分具体实体和通用概念，为构建一个清晰、无污染的 SCP 知识图谱服务。
 

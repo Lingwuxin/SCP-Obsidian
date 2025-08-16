@@ -1,1 +1,52 @@
-config.*
+# 私密配置文件
+config.json
+*.secret
+*.key
+.env
+.env.local
+
+# API密钥和令牌
+*api_key*
+*token*
+*secret*
+
+# 本地配置文件
+local_config.toml
+private_config.toml
+
+# 大文件和数据文件
+*.zim
+data/
+downloads/
+temp/
+
+# IDE和编辑器文件
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Python相关
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# 操作系统相关
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志文件
+*.log
+logs/
+
+# 测试文件
+test_output/
+*.test
