@@ -1,0 +1,10 @@
+{
+    "dify": {
+        "dify-base-url": "localhost",
+        "dify-workflow-api-key": "your_api_key_here",
+        "dify-datasets-api-key": "your_api_key_here"
+    },
+    "SCP_offline_zim": {
+        "path": "path/to/your/SCP_offline_zim"
+    }
+}
