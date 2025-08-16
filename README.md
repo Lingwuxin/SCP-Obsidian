@@ -1,13 +1,13 @@
 # SCP-Obsidian
 将SCP基金会的文档通过AI转换为Obsidian文档，实现SCP基金会知识图谱
 # 概览
-1. 当前使用SCP离线计划提供ZIM文档获取SCP文档，后期可能会改为使用爬虫以实现文档动态更新，封装成MCP工具[SCP-ZIM-MCP-Server](#https://github.com/Lingwuxin/SCP-ZIM-MCP-Server)；
+1. 当前使用SCP离线计划提供ZIM文档获取SCP文档，后期可能会改为使用爬虫以实现文档动态更新，封装成MCP工具[SCP-ZIM-MCP-Server](https://github.com/Lingwuxin/SCP-ZIM-MCP-Server)；
 2. Agent所需的[Prompt](#Prompt)会不断更新。
 # 方案
 ## SCP文档来源
-[SCP基金会离线计划](#https://scp-wiki-cn.wikidot.com/offline) V2，ZIM格式文档。
+[SCP基金会离线计划](https://scp-wiki-cn.wikidot.com/offline) V2，ZIM格式文档。
 ## AI
-使用[Dify](#https://github.com/langgenius/dify)搭建智能体，部分[Dify工具](#https://github.com/Lingwuxin/DifyTools)。
+使用[Dify](https://github.com/langgenius/dify)搭建智能体，部分[Dify工具](https://github.com/Lingwuxin/DifyTools)。
 ## MCP
 使用python的`mcp.server.fastmcp`
 ### Prompt
