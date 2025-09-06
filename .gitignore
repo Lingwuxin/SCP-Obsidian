@@ -50,3 +50,4 @@ logs/
 # 测试文件
 test_output/
 *.test
+*code-workspace
