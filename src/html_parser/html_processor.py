@@ -6,7 +6,7 @@ HTML 内容处理器
 from bs4 import BeautifulSoup, Tag
 import logging
 from typing import Optional, Dict, List, Union
-
+from src.html_parser.md_br_coverter import md_keep_br
 # 获取日志记录器
 logger = logging.getLogger(__name__)
 
@@ -21,13 +21,14 @@ class SCPHtmlProcessor:
         Args:
             content: HTML 内容字符串
         """
+        self.page_content: str = ""
         self.page_content_div: Optional[Tag] = None
         self.page_tags: list[str] = []
         self.soup: Optional[BeautifulSoup] = None
         if not self._process_html(content):
             logger.error("HTML文档处理失败")
             raise ValueError("获取文档失败")
-    
+
     def _process_html(self, html_content: str) -> bool:
         '''
         处理HTML内容，移除不需要的元素并提取正文和标签
@@ -36,19 +37,48 @@ class SCPHtmlProcessor:
         '''
         try:
             self.soup = BeautifulSoup(html_content, 'html.parser')
-            
+
             self._remove_unwanted_elements()
             self.page_content_div = self._extract_content()
             if self.page_content_div is None:
-                logger.warning("未找到页面内容区域")
+                logger.error("未找到页面内容区域")
                 return False
-            
+            if self._html_to_markdown(str(self.page_content_div)) == False:
+                logger.error("HTML转Markdown失败")
+                return False
             self.page_tags = self._extract_and_convert_tags()
-            logger.debug(f"成功提取 {len(self.page_tags)} 个标签")
             return True
-            
+
         except Exception as e:
             logger.error(f"处理HTML内容时发生错误: {e}")
+            return False
+
+    def _html_to_markdown(self, html: str) -> bool:
+        """
+        将HTML内容转换为Markdown格式
+
+        Args:
+            html: HTML内容字符串
+
+        Returns:
+            str: 转换后的Markdown内容
+        """
+        try:
+            # 预处理HTML，将<br>标签替换为换行符
+            # 这样markdownify就能正确处理换行
+
+            
+            # 使用markdownify转换，配置参数以更好地处理换行和空白
+            self.page_content = md_keep_br(
+                html, 
+                heading_style="ATX",
+                
+                default_title=True,
+                escape_underscores=False
+            )
+            return True
+        except Exception as e:
+            logger.error(f"转换HTML为Markdown时发生错误: {e}")
             return False
 
     def _extract_content(self) -> Optional[Tag]:
@@ -152,7 +182,7 @@ class SCPHtmlProcessor:
         img_tags = []
         if isinstance(self.page_content_div, Tag):
             img_tags = self.page_content_div.find_all('img')
-        
+
         img_srcs = []
         for img in img_tags:
             if isinstance(img, Tag):  # 确保是Tag对象
@@ -199,8 +229,9 @@ class SCPHtmlProcessor:
 
 if __name__ == "__main__":
     # 配置基础日志
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    
+    logging.basicConfig(
+        level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
     processor = SCPHtmlProcessor(
         "<html><body><div id='page-content'>Hello, SCP!</div></body></html>")
     logger.info(f"处理结果: {processor.page_content_div}")

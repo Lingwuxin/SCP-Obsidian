@@ -133,9 +133,21 @@ class SCPProcessingTracker:
         
         self.save_status()
     
-    def should_skip(self, scp_id: str) -> bool:
-        """检查是否应该跳过此项目"""
-        return scp_id in self.status_data['completed_items']
+    def clear_completed_items(self):
+        """清除已完成项目列表（用于重新开始处理）"""
+        self.status_data['completed_items'] = []
+        logger.info("已清除已完成项目列表，将重新开始处理")
+        self.save_status()
+    
+    def should_skip(self, scp_id: str, respect_completed: bool = True) -> bool:
+        """
+        检查是否应该跳过此项目
+        
+        Args:
+            scp_id: SCP 编号
+            respect_completed: 是否尊重已完成列表（断点接续模式下为True，重新开始模式下为False）
+        """
+        return respect_completed and scp_id in self.status_data['completed_items']
     
     def get_statistics(self) -> dict:
         """获取处理统计信息"""

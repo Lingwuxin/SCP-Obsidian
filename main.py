@@ -128,14 +128,15 @@ def get_scp_subdirectory(scp_id: str) -> str:
         return "other"
 
 
-def make_obsidian_md(zim: ReadZIM, scp_id: str) -> bool:
+def make_obsidian_md(zim: ReadZIM, scp_id: str, respect_completed: bool = True) -> bool:
     """
     make the scp markdown file how to use the SCP ZIM.
     scp_id: The ID of the SCP to generate the markdown for. like "scp-001","scp-8002"
+    respect_completed: 是否尊重已完成列表，False时会重新处理已完成的项目
     """
     try:
         # 检查是否已经处理过
-        if tracker.should_skip(scp_id):
+        if tracker.should_skip(scp_id, respect_completed=respect_completed):
             logger.info(f"[SKIP] 跳过已处理的项目: {scp_id}")
             return True
         
@@ -195,7 +196,7 @@ def make_obsidian_md(zim: ReadZIM, scp_id: str) -> bool:
             raise ValueError(error_msg)
         
         # 生成 Markdown 文件
-        md_content = f'{html_processor.page_content_div}'
+        md_content = f'{html_processor.page_content}'
         
         # 检查输出目录是否存在
         if SCP_MD_OUTPUT_DIR is None:
@@ -326,7 +327,7 @@ def main():
         # 处理单个 SCP
         if args.single:
             print_info(f"单个处理模式: {args.single}")
-            success = make_obsidian_md(zim, args.single)
+            success = make_obsidian_md(zim, args.single, respect_completed=args.resume)
             if success:
                 print_info(f"成功处理 {args.single}")
             else:
@@ -342,6 +343,10 @@ def main():
         if args.resume:
             start_num = tracker.get_resume_point()
             print_info(f"断点接续模式: 从 SCP-{start_num:03d} 开始")
+        else:
+            # 如果不是断点接续模式，可以选择性地清除已完成列表
+            # 这里我们不自动清除，而是通过不检查已完成列表来实现重新开始
+            print_info(f"重新开始模式: 从 SCP-{start_num:03d} 开始（将重新处理所有项目）")
         
         # 批量处理
         print_info(f"开始批量处理SCP文档: SCP-{start_num:03d} 到 SCP-{end_num:03d}")
@@ -356,7 +361,7 @@ def main():
         if args.resume:
             for i in range(start_num, end_num + 1):
                 scp_check_id = f"scp-{i:03d}"
-                if tracker.should_skip(scp_check_id):
+                if tracker.should_skip(scp_check_id, respect_completed=True):
                     completed_in_range += 1
         
         # 创建进度条
@@ -382,14 +387,14 @@ def main():
                     break
                 
                 # 检查是否需要跳过
-                if tracker.should_skip(scp_id):
+                if tracker.should_skip(scp_id, respect_completed=args.resume):
                     pbar.set_description(f"处理SCP文档 [跳过{scp_id}]")
                     # 对于跳过的项目，如果不是断点接续模式，也需要更新进度条
                     if not args.resume or completed_in_range == 0:
                         pbar.update(1)
                     continue
                     
-                success = make_obsidian_md(zim, scp_id)
+                success = make_obsidian_md(zim, scp_id, respect_completed=args.resume)
                 
                 # 更新进度条描述
                 if success:
