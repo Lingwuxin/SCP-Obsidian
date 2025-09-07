@@ -12,10 +12,9 @@
 计划使用LangGraph搭建智能体，LLM提示词见[Prompt.md](/Prompt.md)
 ### MCP
 使用python的`mcp.server.fastmcp`
-#### Obsidian-MCP-Server
-首先实现以下工具:
+#### Obsidian-md-MCP-Server
+[Obsidian-md-MCP-Server](https://github.com/Lingwuxin/Obsidian-md-MCP-Server)首先实现以下工具:
 - 文档读取
 - 双向连接管理
-- 标签管理
 #### SCP-ZIM-MCP-Server
 [SCP-ZIM-MCP-Server](https://github.com/Lingwuxin/SCP-ZIM-MCP-Server)是为了验证该项目的可行性而开发的mcp工具，可以从ZIM文档读取内容，并转换成对应的md文档，现阶段意义不大，已废弃。
